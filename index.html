@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dr. Ramya A – Compassionate Mental Health Care</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf8f4;
+    --sage: #8a9e8a;
+    --sage-light: #c2d0c2;
+    --gold: #b89a6a;
+    --gold-light: #d4b88a;
+    --charcoal: #2c2c2c;
+    --brown: #6b5a47;
+    --muted: #888;
+    --border: rgba(139,154,139,0.25);
+    --shadow: 0 8px 40px rgba(44,44,44,0.08);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm-white);
+    color: var(--charcoal);
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--sage); border-radius: 3px; }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 40px;
+    background: rgba(250,248,244,0.93);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+  }
+  header.scrolled { box-shadow: 0 2px 20px rgba(44,44,44,0.08); }
+
+  .logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600;
+    letter-spacing: 0.02em; color: var(--charcoal);
+    text-decoration: none;
+  }
+  .logo span { color: var(--gold); }
+
+  nav { display: flex; gap: 36px; align-items: center; }
+  nav a {
+    font-size: 0.8rem; font-weight: 400;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--charcoal); text-decoration: none;
+    position: relative; transition: color 0.3s;
+  }
+  nav a::after {
+    content: ''; position: absolute; bottom: -3px; left: 0; right: 0;
+    height: 1px; background: var(--gold);
+    transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+  }
+  nav a:hover { color: var(--gold); }
+  nav a:hover::after { transform: scaleX(1); }
+
+  .nav-cta {
+    background: var(--charcoal); color: var(--warm-white) !important;
+    padding: 10px 22px; border-radius: 2px;
+    font-size: 0.75rem !important; letter-spacing: 0.1em !important;
+    transition: background 0.3s !important;
+  }
+  .nav-cta:hover { background: var(--gold) !important; }
+  .nav-cta::after { display: none; }
+
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--charcoal);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1); border-radius: 2px;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ── DRAWER ── */
+  .drawer {
+    position: fixed; top: 0; left: 0; bottom: 0;
+    width: 280px; z-index: 200;
+    background: var(--warm-white); border-right: 1px solid var(--border);
+    transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    display: flex; flex-direction: column; padding: 80px 40px 40px;
+  }
+  .drawer.open { transform: translateX(0); }
+
+  .drawer-overlay {
+    position: fixed; inset: 0; z-index: 190;
+    background: rgba(44,44,44,0.35);
+    opacity: 0; pointer-events: none; transition: opacity 0.4s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: all; }
+
+  .drawer-close {
+    position: absolute; top: 24px; right: 24px;
+    background: none; border: none; cursor: pointer;
+    font-size: 1.4rem; color: var(--muted); transition: color 0.2s;
+  }
+  .drawer-close:hover { color: var(--charcoal); }
+
+  .drawer-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-weight: 300;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 48px;
+  }
+
+  .drawer nav { flex-direction: column; gap: 0; }
+  .drawer nav a {
+    font-size: 0.85rem; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 18px 0; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    color: var(--charcoal); text-decoration: none;
+    transition: color 0.25s, padding-left 0.25s;
+  }
+  .drawer nav a:hover { color: var(--gold); padding-left: 8px; }
+  .drawer nav a .d-icon { color: var(--sage); font-size: 1rem; width: 20px; text-align: center; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+    align-items: center; padding: 120px 80px 80px;
+    gap: 60px; position: relative; overflow: hidden;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 70% at 80% 40%, rgba(194,208,194,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 20% 80%, rgba(184,154,106,0.1) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .hero-text { position: relative; z-index: 1; }
+
+  .hero-eyebrow {
+    font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px;
+    display: flex; align-items: center; gap: 12px;
+    opacity: 0; animation: fadeUp 0.8s 0.3s forwards;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block; width: 30px; height: 1px; background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 300;
+    line-height: 1.15; color: var(--charcoal); margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s 0.5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold); }
+
+  .hero-sub {
+    font-size: 0.95rem; line-height: 1.8; color: var(--muted);
+    max-width: 420px; margin-bottom: 44px;
+    opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+  }
+
+  .hero-actions {
+    display: flex; gap: 16px; align-items: center;
+    opacity: 0; animation: fadeUp 0.8s 0.9s forwards;
+  }
+
+  .btn-primary {
+    background: var(--charcoal); color: var(--warm-white);
+    padding: 14px 32px; font-family: 'DM Sans', sans-serif;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    border: none; cursor: pointer; border-radius: 2px;
+    text-decoration: none; transition: background 0.3s, transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+
+  .btn-ghost {
+    color: var(--charcoal); font-size: 0.8rem; letter-spacing: 0.1em;
+    text-transform: uppercase; text-decoration: none;
+    display: flex; align-items: center; gap: 8px;
+    transition: color 0.3s, gap 0.3s;
+  }
+  .btn-ghost:hover { color: var(--gold); gap: 14px; }
+  .btn-ghost::after { content: '→'; }
+
+  /* ── HERO IMAGE ── */
+  .hero-image {
+    position: relative; z-index: 1;
+    opacity: 0; animation: fadeIn 1s 0.6s forwards;
+  }
+
+  .hero-image-frame {
+    position: relative; border-radius: 4px;
+    overflow: hidden; aspect-ratio: 3/4; max-height: 580px;
+  }
+  .hero-image-frame::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(184,154,106,0.12) 0%, transparent 50%);
+    z-index: 1;
+  }
+  .hero-image-frame img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center top;
+    filter: saturate(0.9);
+    transition: transform 0.8s ease;
+  }
+  .hero-image-frame:hover img { transform: scale(1.03); }
+
+  .hero-badge {
+    position: absolute; bottom: -20px; left: -20px; z-index: 2;
+    background: var(--warm-white); border: 1px solid var(--border);
+    border-radius: 3px; padding: 18px 24px; box-shadow: var(--shadow);
+    min-width: 180px;
+  }
+  .hero-badge-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem; font-weight: 300; color: var(--gold); line-height: 1;
+  }
+  .hero-badge-label { font-size: 0.72rem; color: var(--muted); letter-spacing: 0.06em; margin-top: 4px; }
+
+  .hero-deco {
+    position: absolute; top: 30%; right: -40px;
+    width: 120px; height: 1px; background: var(--sage-light);
+    opacity: 0; animation: fadeIn 1s 1.2s forwards;
+  }
+
+  /* ── SECTION SHARED ── */
+  section { padding: 100px 80px; }
+  .section-tag {
+    font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .section-tag::before { content: ''; display: block; width: 20px; height: 1px; background: var(--gold); }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3rem); font-weight: 300; line-height: 1.2; margin-bottom: 20px;
+  }
+  .section-title em { font-style: italic; color: var(--gold); }
+
+  .section-subtitle {
+    font-size: 0.9rem; line-height: 1.8; color: var(--muted);
+    max-width: 480px; margin-bottom: 60px;
+  }
+
+  /* ── SPECIALISATIONS ── */
+  .specializations { background: var(--cream); }
+
+  .spec-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 2px; margin-top: 60px;
+  }
+
+  .spec-card {
+    background: var(--warm-white); padding: 44px 36px;
+    position: relative; overflow: hidden;
+    transition: transform 0.35s, box-shadow 0.35s; cursor: default;
+  }
+  .spec-card::before {
+    content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--sage), var(--gold));
+    transform: scaleX(0); transform-origin: left; transition: transform 0.4s;
+  }
+  .spec-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+  .spec-card:hover::before { transform: scaleX(1); }
+
+  .spec-icon {
+    width: 48px; height: 48px; background: var(--cream); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 22px; transition: background 0.3s;
+  }
+  .spec-card:hover .spec-icon { background: var(--sage-light); }
+
+  .spec-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600; margin-bottom: 12px;
+  }
+  .spec-desc { font-size: 0.85rem; line-height: 1.75; color: var(--muted); }
+
+  /* ── WHAT TO EXPECT ── */
+  .expect { background: var(--warm-white); }
+
+  .expect-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .expect-steps { display: flex; flex-direction: column; gap: 0; }
+
+  .expect-step {
+    display: grid; grid-template-columns: 56px 1fr; gap: 24px;
+    padding: 32px 0; border-bottom: 1px solid var(--border);
+    opacity: 0; transform: translateX(-24px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .expect-step.visible { opacity: 1; transform: translateX(0); }
+  .expect-step:first-child { border-top: 1px solid var(--border); }
+
+  .step-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem; font-weight: 300;
+    color: var(--sage-light); line-height: 1; padding-top: 2px;
+  }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 600; margin-bottom: 8px;
+  }
+  .step-text { font-size: 0.85rem; line-height: 1.75; color: var(--muted); }
+
+  .expect-image {
+    position: relative; opacity: 0; transform: scale(0.96);
+    transition: opacity 0.8s 0.2s, transform 0.8s 0.2s;
+  }
+  .expect-image.visible { opacity: 1; transform: scale(1); }
+  .expect-image img {
+    width: 100%; aspect-ratio: 3/4; object-fit: cover;
+    filter: saturate(0.8); border-radius: 3px;
+  }
+  .expect-image::after {
+    content: ''; position: absolute; inset: -12px; z-index: -1;
+    border: 1px solid var(--sage-light); border-radius: 4px;
+  }
+
+  /* ── ABOUT ── */
+  .about { background: var(--charcoal); color: var(--warm-white); }
+  .about .section-tag { color: var(--gold-light); }
+  .about .section-tag::before { background: var(--gold-light); }
+  .about .section-title { color: var(--warm-white); }
+  .about .section-subtitle { color: rgba(255,255,255,0.55); }
+
+  .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+  .about-image {
+    border-radius: 4px; overflow: hidden;
+    aspect-ratio: 1/1;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  }
+  .about-image img {
+    width: 100%; height: 100%; object-fit: cover;
+    object-position: center top;
+    filter: saturate(0.88);
+    transition: transform 0.8s ease;
+    border-radius: 4px;
+  }
+  .about-image:hover img { transform: scale(1.03); }
+
+  .credentials { margin-top: 48px; display: flex; flex-direction: column; gap: 16px; }
+
+  .cred-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    font-size: 0.85rem; color: rgba(255,255,255,0.7); line-height: 1.5;
+  }
+  .cred-check {
+    width: 20px; height: 20px; border-radius: 50%;
+    background: rgba(138,158,138,0.3);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; margin-top: 1px; font-size: 0.7rem; color: var(--sage-light);
+  }
+
+  /* ── BOOKING ── */
+  .booking { background: var(--cream); }
+  .booking-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+
+  .booking-form {
+    background: var(--warm-white); border: 1px solid var(--border);
+    border-radius: 4px; padding: 48px; box-shadow: var(--shadow);
+  }
+
+  .form-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem; font-weight: 300; margin-bottom: 8px;
+  }
+  .form-subtitle { font-size: 0.82rem; color: var(--muted); margin-bottom: 36px; }
+
+  .form-group { margin-bottom: 20px; }
+
+  label {
+    display: block; font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+
+  input, textarea, select {
+    width: 100%; padding: 13px 16px; border: 1px solid var(--border);
+    background: var(--warm-white); font-family: 'DM Sans', sans-serif;
+    font-size: 0.88rem; color: var(--charcoal); border-radius: 2px;
+    outline: none; transition: border-color 0.25s, box-shadow 0.25s; appearance: none;
+  }
+  input:focus, textarea:focus, select:focus {
+    border-color: var(--sage); box-shadow: 0 0 0 3px rgba(138,158,138,0.15);
+  }
+  textarea { resize: vertical; min-height: 90px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .btn-submit {
+    width: 100%; background: var(--charcoal); color: var(--warm-white);
+    border: none; cursor: pointer; padding: 15px;
+    font-family: 'DM Sans', sans-serif; font-size: 0.8rem;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    border-radius: 2px; margin-top: 8px;
+    transition: background 0.3s, transform 0.2s;
+    position: relative; overflow: hidden;
+  }
+  .btn-submit::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--gold); transform: translateX(-100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+  }
+  .btn-submit:hover::before { transform: translateX(0); }
+  .btn-submit span { position: relative; z-index: 1; }
+  .btn-submit:hover { transform: translateY(-1px); }
+
+  /* ── FOOTER / LOCATION ── */
+  .sanctuary {
+    background: var(--charcoal); color: var(--warm-white);
+    padding: 80px; display: grid; grid-template-columns: 1fr 1.2fr;
+    gap: 80px; align-items: start;
+  }
+
+  .sanc-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem; font-weight: 300; margin-bottom: 8px;
+  }
+  .sanc-sub { font-size: 0.82rem; color: rgba(255,255,255,0.45); margin-bottom: 36px; }
+  .sanc-info { display: flex; flex-direction: column; gap: 20px; }
+  .sanc-item {
+    display: flex; gap: 14px; font-size: 0.85rem;
+    color: rgba(255,255,255,0.65); line-height: 1.6;
+  }
+  .sanc-icon { color: var(--sage); font-size: 1rem; margin-top: 1px; flex-shrink: 0; }
+
+  .sanc-map {
+    border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.1);
+    height: 320px;
+  }
+  .sanc-map iframe {
+    width: 100%; height: 100%; border: none; filter: grayscale(20%) contrast(1.05);
+  }
+
+  .footer-bottom {
+    background: #1e1e1e; padding: 24px 80px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.3); font-size: 0.75rem; letter-spacing: 0.08em;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(24px);
+    transition: opacity 0.7s, transform 0.7s;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--charcoal); color: var(--warm-white);
+    padding: 14px 28px; border-radius: 3px;
+    font-size: 0.82rem; letter-spacing: 0.06em;
+    opacity: 0; pointer-events: none; transition: opacity 0.4s, transform 0.4s;
+    z-index: 999; border-left: 3px solid var(--sage); white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── PULSE ── */
+  .pulse-ring { display: inline-flex; position: relative; }
+  .pulse-ring::before, .pulse-ring::after {
+    content: ''; position: absolute; inset: -6px; border-radius: 50%;
+    border: 1px solid var(--sage); animation: pulse 2.5s ease-out infinite;
+  }
+  .pulse-ring::after { animation-delay: 1.25s; }
+  @keyframes pulse {
+    0% { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    section, .sanctuary, .footer-bottom { padding: 60px 32px; }
+    header { padding: 16px 24px; }
+    nav { display: none; }
+    .hamburger { display: flex; }
+    .hero { grid-template-columns: 1fr; padding: 100px 32px 60px; text-align: center; }
+    .hero-text { order: 2; }
+    .hero-image { order: 1; }
+    .hero-sub { max-width: 100%; }
+    .hero-actions { justify-content: center; }
+    .spec-grid { grid-template-columns: 1fr; gap: 2px; }
+    .expect-layout, .about-layout, .booking-layout, .sanctuary { grid-template-columns: 1fr; gap: 48px; }
+    .hero-badge { bottom: 12px; left: 12px; }
+    .form-row { grid-template-columns: 1fr; }
+    .sanc-map { height: 240px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- DRAWER OVERLAY -->
+<div class="drawer-overlay" id="overlay" onclick="closeDrawer()"></div>
+
+<!-- DRAWER -->
+<aside class="drawer" id="drawer" role="dialog" aria-label="Navigation">
+  <button class="drawer-close" onclick="closeDrawer()" aria-label="Close">✕</button>
+  <p class="drawer-title">Menu</p>
+  <nav>
+    <a href="#specializations" onclick="closeDrawer()"><span class="d-icon">✦</span>Specializations</a>
+    <a href="#expect" onclick="closeDrawer()"><span class="d-icon">⬡</span>What to Expect</a>
+    <a href="#about" onclick="closeDrawer()"><span class="d-icon">♤</span>About</a>
+    <a href="#booking" onclick="closeDrawer()"><span class="d-icon">◎</span>Book a Session</a>
+  </nav>
+</aside>
+
+<!-- HEADER -->
+<header id="header">
+  <a class="logo" href="#">Ramya<span> A</span></a>
+  <nav>
+    <a href="#specializations">Specializations</a>
+    <a href="#expect">What to Expect</a>
+    <a href="#about">About</a>
+    <a href="#booking" class="nav-cta">Book Now</a>
+  </nav>
+  <button class="hamburger" id="hamburger" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Healed with Intention</p>
+    <h1 class="hero-title">
+      Compassionate<br>
+      <em>Mental Health Care</em><br>
+      for a Balanced Life.
+    </h1>
+    <p class="hero-sub">
+      18 years of clinical excellence in psychiatry. Evidence-based therapy tailored to your unique journey — reclaim clarity, connection, and purpose.
+    </p>
+    <div class="hero-actions">
+      <a href="#booking" class="btn-primary">Book a Session</a>
+      <a href="#about" class="btn-ghost">Meet Dr. Ramya A</a>
+    </div>
+  </div>
+
+  <div class="hero-image">
+    <div class="hero-image-frame">
+      <img src="ramya.jpg" alt="Ramya A – English Teacher" />
+    </div>
+    <div class="hero-badge">
+      <div class="hero-badge-num">18+</div>
+      <div class="hero-badge-label">Years of Clinical Practice</div>
+    </div>
+    <div class="hero-deco"></div>
+  </div>
+</section>
+
+<!-- SPECIALIZATIONS -->
+<section class="specializations" id="specializations">
+  <div class="reveal">
+    <p class="section-tag">Areas of Care</p>
+    <h2 class="section-title">Expert care tailored<br>to your <em>unique</em> needs</h2>
+    <p class="section-subtitle">Evidence-backed approaches for the mental health challenges that matter most to you.</p>
+  </div>
+
+    <div class="spec-grid">
+      <div class="spec-card reveal reveal-delay-1">
+        <div class="spec-icon">🌿</div>
+        <h3 class="spec-name">Anxiety</h3>
+        <p class="spec-desc">Personalised strategies to manage anxiety, break cycles of worry, and restore a sense of calm and control in daily life.</p>
+      </div>
+      <div class="spec-card reveal reveal-delay-2">
+        <div class="spec-icon">🧠</div>
+        <h3 class="spec-name">Depression</h3>
+        <p class="spec-desc">Compassionate, evidence-informed therapy to help you navigate depression, rebuild resilience, and reconnect with purpose.</p>
+      </div>
+      <div class="spec-card reveal reveal-delay-3">
+        <div class="spec-icon">👶</div>
+        <h3 class="spec-name">Child Psychiatry</h3>
+        <p class="spec-desc">Specialised support for children and families, addressing emotional and behavioural challenges with a gentle, child-first approach.</p>
+      </div>
+    </div>
+</section>
+
+<!-- WHAT TO EXPECT -->
+<section class="expect" id="expect">
+  <div class="expect-layout">
+    <div>
+      <div class="reveal">
+        <p class="section-tag">The Process</p>
+        <h2 class="section-title">What to <em>Expect</em></h2>
+        <p class="section-subtitle">A clear, supportive path from your first contact to lasting wellbeing.</p>
+      </div>
+      <div class="expect-steps">
+        <div class="expect-step">
+          <div class="step-num">01</div>
+          <div>
+            <h4 class="step-title">Initial Consultation</h4>
+            <p class="step-text">A confidential, judgment-free conversation to understand your history, concerns, and goals — setting the foundation for care.</p>
+          </div>
+        </div>
+        <div class="expect-step">
+          <div class="step-num">02</div>
+          <div>
+            <h4 class="step-title">Personalised Plan</h4>
+            <p class="step-text">A tailored therapeutic roadmap — combining proven modalities, clear milestones, and flexible pacing to suit your life.</p>
+          </div>
+        </div>
+        <div class="expect-step">
+          <div class="step-num">03</div>
+          <div>
+            <h4 class="step-title">Ongoing Support</h4>
+            <p class="step-text">Regular sessions that adapt to your progress, with continuous reflection and compassionate guidance every step of the way.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="expect-image">
+      <div style="width:100%;aspect-ratio:3/4;background:linear-gradient(180deg,#d4c4a8 0%,#b89a6a 100%);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+        <div style="text-align:center;color:rgba(255,255,255,0.65);">
+          <div style="font-size:4rem;margin-bottom:12px;">🛋️</div>
+          <p style="font-family:'Cormorant Garamond',serif;font-size:0.9rem;letter-spacing:0.12em;">Our Sanctuary</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-layout">
+    <div class="about-image reveal">
+      <img src="ramya.jpg" alt="Ramya A – English Teacher" />
+    </div>
+    <div class="reveal">
+      <p class="section-tag">About Dr. Ramya A</p>
+      <h2 class="section-title" style="color:var(--warm-white);">Expertise Rooted in <em style="color:var(--gold-light);">Empathy</em></h2>
+      <p class="section-subtitle">With 18 years of clinical experience, Dr. Ramya A is dedicated to delivering psychiatry by the highest standards of evidence, patient-centred care, and a comprehensive treatment approach.</p>
+      <div class="credentials">
+        <div class="cred-item">
+          <div class="cred-check">✓</div>
+          <span>MBBS, MD Psychiatry — 18 Years of Clinical Practice</span>
+        </div>
+        <div class="cred-item">
+          <div class="cred-check">✓</div>
+          <span>Certified Cognitive Behavioural Therapist (CBT)</span>
+        </div>
+        <div class="cred-item">
+          <div class="cred-check">✓</div>
+          <span>Member of Indian Psychiatric Society</span>
+        </div>
+        <div class="cred-item">
+          <div class="cred-check">✓</div>
+          <span>Specialised training in Child & Adolescent Mental Health</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="booking" id="booking">
+  <div class="booking-layout">
+    <div class="reveal">
+      <p class="section-tag">Get in Touch</p>
+      <h2 class="section-title">Book Your<br><em>Consultation</em></h2>
+      <p class="section-subtitle">Take the first step toward a clearer, calmer mind. All inquiries are treated with complete confidentiality.</p>
+      <div style="margin-top:48px;display:flex;flex-direction:column;gap:24px;">
+        <div style="display:flex;gap:14px;align-items:center;">
+          <div class="pulse-ring">
+            <div style="width:12px;height:12px;background:var(--sage);border-radius:50%;"></div>
+          </div>
+          <span style="font-size:0.82rem;color:var(--muted);">Currently accepting new patients</span>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center;">
+          <span style="font-size:1.1rem;">📞</span>
+          <a href="tel:9994695196" style="font-size:0.95rem;color:var(--charcoal);text-decoration:none;font-weight:500;letter-spacing:0.04em;transition:color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--charcoal)'">+91 99946 95196</a>
+        </div>
+        <p style="font-size:0.82rem;color:var(--muted);line-height:1.8;">Sessions available in-person and via secure video call. Response within 24 hours on working days.</p>
+      </div>
+    </div>
+
+    <div class="booking-form reveal reveal-delay-1">
+      <h3 class="form-title">Request an Appointment</h3>
+      <p class="form-subtitle">Fill in your details and Dr. Ramya will be in touch shortly.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="e.g. Arun Kumar"/>
+        </div>
+        <div class="form-group">
+          <label>Mobile Number</label>
+          <input type="tel" placeholder="+91 00000 00000"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" placeholder="you@email.com"/>
+      </div>
+      <div class="form-group">
+        <label>Area of Interest</label>
+        <select>
+          <option value="" disabled selected>Select a concern</option>
+          <option>Anxiety or Stress</option>
+          <option>Depression or Low Mood</option>
+          <option>Child / Adolescent Psychiatry</option>
+          <option>Relationship Difficulties</option>
+          <option>General Consultation</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Preferred Dates or Additional Notes</label>
+        <textarea placeholder="When are you available? Any details you'd like to share?"></textarea>
+      </div>
+      <button class="btn-submit" onclick="handleSubmit()"><span>Submit Request</span></button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER / LOCATION -->
+<footer>
+  <div class="sanctuary" id="sanctuary">
+    <div>
+      <h3 class="sanc-title">Find Us</h3>
+      <p class="sanc-sub">A warm, welcoming space designed for learning.</p>
+      <div class="sanc-info">
+        <div class="sanc-item">
+          <span class="sanc-icon">📍</span>
+          <a href="https://maps.app.goo.gl/JNaxY8wGZpCqDHDi8" target="_blank" rel="noopener" style="color:rgba(255,255,255,0.65);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">View on Google Maps ↗</a>
+        </div>
+        <div class="sanc-item">
+          <span class="sanc-icon">📞</span>
+          <a href="tel:9994695196" style="color:rgba(255,255,255,0.65);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--gold-light)'" onmouseout="this.style.color='rgba(255,255,255,0.65)'">+91 99946 95196</a>
+        </div>
+        <div class="sanc-item">
+          <span class="sanc-icon">🕐</span>
+          <span>Mon – Sat &nbsp;|&nbsp; 9:00 AM – 6:00 PM</span>
+        </div>
+        <div class="sanc-item">
+          <span class="sanc-icon">🎓</span>
+          <span>18 Years of Psychiatric Excellence</span>
+        </div>
+      </div>
+    </div>
+    <div class="sanc-map">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d62608.33836248218!2d78.12454!3d11.68124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMTHCsDQwJzUyLjUiTiA3OMKwMDcnMjguNCJF!5e0!3m2!1sen!2sin!4v1711234567890!5m2!1sen!2sin"
+        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+        title="Location Map">
+      </iframe>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Dr. Ramya A – Psychiatrist &nbsp;|&nbsp; +91 99946 95196</span>
+    <span style="color:rgba(255,255,255,0.2);">Teaching with intention, always.</span>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✓ &nbsp;Appointment request submitted successfully!</div>
+
+<script>
+  /* ── HEADER SCROLL ── */
+  const header = document.getElementById('header');
+  window.addEventListener('scroll', () => {
+    header.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  /* ── DRAWER ── */
+  function toggleDrawer() {
+    const drawer = document.getElementById('drawer');
+    const overlay = document.getElementById('overlay');
+    const hamburger = document.getElementById('hamburger');
+    const open = drawer.classList.toggle('open');
+    overlay.classList.toggle('open', open);
+    hamburger.classList.toggle('open', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  }
+  function closeDrawer() {
+    document.getElementById('drawer').classList.remove('open');
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('hamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  /* ── SCROLL REVEAL ── */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.reveal, .expect-step, .expect-image').forEach(el => io.observe(el));
+
+  document.querySelectorAll('.expect-step').forEach((el, i) => {
+    el.style.transitionDelay = `${i * 0.12}s`;
+  });
+
+  /* ── FORM SUBMIT ── */
+  function handleSubmit() {
+    const toast = document.getElementById('toast');
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3500);
+  }
+
+  /* ── ACTIVE NAV ── */
+  const navIO = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        document.querySelectorAll('nav a:not(.nav-cta)').forEach(a => a.style.color = '');
+        const active = document.querySelector(`nav a[href="#${e.target.id}"]`);
+        if (active) active.style.color = 'var(--gold)';
+      }
+    });
+  }, { rootMargin: '-40% 0px -50% 0px' });
+
+  document.querySelectorAll('section[id]').forEach(s => navIO.observe(s));
+</script>
+</body>
+</html>
