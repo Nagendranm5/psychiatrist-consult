@@ -93,17 +93,18 @@
   /* ── DRAWER ── */
   .drawer {
     position: fixed; top: 0; left: 0; bottom: 0;
-    width: 280px; z-index: 200;
+    width: min(340px, 85vw); z-index: 200;
     background: var(--warm-white); border-right: 1px solid var(--border);
     transform: translateX(-100%);
     transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
-    display: flex; flex-direction: column; padding: 80px 40px 40px;
+    display: flex; flex-direction: column; padding: 80px 28px 40px;
+    box-shadow: 10px 0 28px rgba(0,0,0,0.14);
   }
   .drawer.open { transform: translateX(0); }
 
   .drawer-overlay {
     position: fixed; inset: 0; z-index: 190;
-    background: rgba(44,44,44,0.35);
+    background: rgba(44,44,44,0.42);
     opacity: 0; pointer-events: none; transition: opacity 0.4s;
   }
   .drawer-overlay.open { opacity: 1; pointer-events: all; }
@@ -500,20 +501,26 @@
 
   /* ── RESPONSIVE ── */
   @media (max-width: 900px) {
-    section, .sanctuary, .footer-bottom { padding: 60px 32px; }
-    header { padding: 16px 24px; }
+    section, .sanctuary, .footer-bottom { padding: 60px 22px; }
+    header { padding: 16px 20px; }
     nav { display: none; }
     .hamburger { display: flex; }
-    .hero { grid-template-columns: 1fr; padding: 100px 32px 60px; text-align: center; }
+    .hero { grid-template-columns: 1fr; padding: 100px 24px 60px; text-align: center; }
     .hero-text { order: 2; }
     .hero-image { order: 1; }
     .hero-sub { max-width: 100%; }
-    .hero-actions { justify-content: center; }
+    .hero-actions { justify-content: center; flex-wrap: wrap; gap: 10px; }
     .spec-grid { grid-template-columns: 1fr; gap: 2px; }
     .expect-layout, .about-layout, .booking-layout, .sanctuary { grid-template-columns: 1fr; gap: 48px; }
     .hero-badge { bottom: 12px; left: 12px; }
     .form-row { grid-template-columns: 1fr; }
     .sanc-map { height: 240px; }
+
+    .drawer { width: 100%; max-width: 100%; border-right: none; border-left: none; }
+    .drawer-close { top: 18px; right: 18px; font-size: 1.5rem; }
+    .drawer-title { font-size: 1.2rem; letter-spacing: 0.18em; }
+    .drawer nav a { font-size: 1rem; padding: 16px 0; }
+    .drawer nav a .d-icon { width: 24px; }
   }
 </style>
 </head>
